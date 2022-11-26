@@ -1,13 +1,15 @@
 import sys
 import sqlite3
-from PyQt5 import uic, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QComboBox
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from main_window import Ui_MainWindow as form1
+from addition import Ui_MainWindow as form2
 
 
-class MainWindow(QMainWindow):
+class MainWindow(QMainWindow, form1):
     def __init__(self):
         super().__init__()
-        uic.loadUi('main.ui', self)
+        self.setupUi(self)
         self.show_info()
         self.pushButton.clicked.connect(self.change_form)
         self.new = None
@@ -34,10 +36,10 @@ class MainWindow(QMainWindow):
         self.hide()
 
 
-class Addition(QMainWindow):
+class Addition(QMainWindow, form2):
     def __init__(self):
         super().__init__()
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
         self.pushButton.clicked.connect(self.add_info)
         self.molot.setChecked(True)
         self.Main_window = None
@@ -71,7 +73,7 @@ class Addition(QMainWindow):
 
 
 if __name__ == '__main__':
-    con = sqlite3.connect('coffee.sqlite')
+    con = sqlite3.connect('Data/coffee.sqlite')
     cur = con.cursor()
     app = QApplication(sys.argv)
     ex = MainWindow()
