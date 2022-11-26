@@ -50,26 +50,41 @@
       <property name="styleSheet">
        <string notr="true">background-color: rgb(231, 231, 231);</string>
       </property>
-      <column>
-       <property name="text">
-        <string>asdfsd</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Новый столбец</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>asdfsad</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>sdfsdaf</string>
-       </property>
-      </column>
+      <property name="autoScroll">
+       <bool>true</bool>
+      </property>
+      <property name="dragEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="dragDropOverwriteMode">
+       <bool>true</bool>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>false</bool>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+      <property name="cornerButtonEnabled">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pushButton">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0.0519324 rgba(108, 255, 128, 255), stop:1 rgba(0, 0, 0, 255));
+color: rgb(175, 2, 5);</string>
+      </property>
+      <property name="text">
+       <string>Добавить запись!</string>
+      </property>
      </widget>
     </item>
    </layout>

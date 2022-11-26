@@ -1,7 +1,7 @@
 import sys
 import sqlite3
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QComboBox
 
 
 class MainWindow(QMainWindow):
@@ -9,12 +9,16 @@ class MainWindow(QMainWindow):
         super().__init__()
         uic.loadUi('main.ui', self)
         self.show_info()
+        self.pushButton.clicked.connect(self.change_form)
+        self.new = None
+        self.tableWidget.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
     def show_info(self):
         self.tableWidget.setColumnCount(7)
-        self.tableWidget.setHorizontalHeaderLabels(('ID', 'название сорта', 'степень обжарки', 'молотый/в зернах', 'описание вкуса', 'цена', 'объем упаковки (граммов)'))
+        self.tableWidget.setHorizontalHeaderLabels(('ID', 'название сорта', 'степень обжарки',
+                                                    'молотый/в зернах', 'описание вкуса', 'цена',
+                                                    'объем упаковки (граммов)'))
         data = cur.execute('SELECT * FROM coffee').fetchall()
-        self.tableWidget.setRowCount(1)
         for i, row in enumerate(data):
             self.tableWidget.setRowCount(
                 self.tableWidget.rowCount() + 1)
@@ -23,6 +27,47 @@ class MainWindow(QMainWindow):
                     i, j, QTableWidgetItem(str(elem)))
         self.tableWidget.resizeColumnsToContents()
         self.tableWidget.verticalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
+
+    def change_form(self):
+        self.new = Addition()
+        self.new.show()
+        self.hide()
+
+
+class Addition(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.pushButton.clicked.connect(self.add_info)
+        self.molot.setChecked(True)
+        self.Main_window = None
+
+    def add_info(self):
+        try:
+            name = self.name.text()
+            price = float(self.price.text())
+            volume = int(self.volume.text())
+            objarka = self.comboBox.currentText()
+            desc = self.descr.toPlainText()
+            if self.zern.isChecked():
+                tip = 'В зернах'
+            else:
+                tip = 'Молотый'
+            necessary_data = (name, objarka, tip, price, volume)
+            assert all(necessary_data)
+            new_id = max((x[0] for x in cur.execute('SELECT ID FROM coffee').fetchall())) + 1
+            cur.execute(f'INSERT INTO coffee VALUES({new_id}, "{name}", "{objarka}", "{tip}", '
+                        f'"{desc}", {price}, {volume})')
+            con.commit()
+            self.Main_window = MainWindow()
+            self.Main_window.show()
+            self.hide()
+        except AssertionError:
+            self.statusbar.setStyleSheet('Background-color: red')
+            self.statusbar.showMessage('Введены не все обязательные данные!')
+        except ValueError:
+            self.statusbar.setStyleSheet('Background-color: red')
+            self.statusbar.showMessage('Введены некорректные данные!')
 
 
 if __name__ == '__main__':
